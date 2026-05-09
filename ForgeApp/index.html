@@ -11,363 +11,372 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
+    <div class="app-container">
+      <!-- TOAST -->
+      <div class="toast" id="toast"></div>
 
-    <!-- TIMER OVERLAY -->
-    <div class="timer-overlay" id="timerOverlay">
-      <div>
-        <div class="timer-label">REST TIMER</div>
-        <div class="timer-display" id="timerDisplay">01:30</div>
-      </div>
-      <div class="timer-actions">
-        <button class="btn-timer" onclick="resetTimer()">Reset</button>
-        <button class="btn-timer" onclick="dismissTimer()">Skip</button>
-      </div>
-    </div>
-
-    <!-- EXERCISE PICKER MODAL -->
-    <div class="modal-overlay" id="exerciseModal">
-      <div class="modal">
-        <div class="modal-header">
-          <span class="modal-title">Add Exercise</span>
-          <button class="modal-close" onclick="closeModal()">✕</button>
+      <!-- TIMER OVERLAY -->
+      <div class="timer-overlay" id="timerOverlay">
+        <div>
+          <div class="timer-label">REST TIMER</div>
+          <div class="timer-display" id="timerDisplay">01:30</div>
         </div>
-        <div class="search-box">
-          <input
-            type="text"
-            class="search-input"
-            id="exerciseSearch"
-            placeholder="Search exercises..."
-            oninput="filterExercises()"
-          />
-        </div>
-        <div class="exercise-list" id="exerciseList"></div>
-        <div class="add-custom-input">
-          <input
-            type="text"
-            id="customExerciseName"
-            placeholder="Add custom exercise..."
-          />
-          <button class="btn-add-custom" onclick="addCustomExercise()">
-            + Add
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════ HOME ══════════════ -->
-    <div class="screen active" id="screen-home">
-      <div class="screen-header">
-        <div class="label">// FORGE</div>
-        <h1>TODAY</h1>
-      </div>
-
-      <div class="hero-card card">
-        <div class="hero-date" id="heroDate"></div>
-        <div class="streak-badge" id="streakBadge">🔥 0 day streak</div>
-        <button class="btn-start" onclick="goToLog()">⚡ START WORKOUT</button>
-      </div>
-
-      <div class="stats-row">
-        <div class="stat-mini">
-          <div class="num" id="statWeekWorkouts">0</div>
-          <div class="lbl">This Week</div>
-        </div>
-        <div class="stat-mini">
-          <div class="num" id="statTotal">0</div>
-          <div class="lbl">Total</div>
-        </div>
-        <div class="stat-mini">
-          <div class="num" id="statPRs">0</div>
-          <div class="lbl">PRs Set</div>
+        <div class="timer-actions">
+          <button class="btn-timer" onclick="resetTimer()">Reset</button>
+          <button class="btn-timer" onclick="dismissTimer()">Skip</button>
         </div>
       </div>
 
-      <!-- Week Activity -->
-      <div class="card" style="margin: 0 16px 16px">
-        <div
-          style="
-            font-family: &quot;JetBrains Mono&quot;, monospace;
-            font-size: 11px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 12px;
-          "
-        >
-          Weekly Activity
-        </div>
-        <div class="week-bar" id="weekBar"></div>
-      </div>
-
-      <div class="section-title">RECENT WORKOUTS</div>
-      <div id="recentWorkouts"></div>
-    </div>
-
-    <!-- ══════════════ LOG ══════════════ -->
-    <div class="screen" id="screen-log">
-      <div class="screen-header">
-        <div class="label">// LOG</div>
-        <h1>WORKOUT</h1>
-      </div>
-
-      <div class="workout-note-area">
-        <span style="font-size: 18px; margin-top: 2px">📝</span>
-        <textarea
-          id="workoutNote"
-          placeholder="How are you feeling today?"
-          rows="2"
-        ></textarea>
-      </div>
-
-      <div id="exerciseCards"></div>
-
-      <div id="suggestionArea" style="margin-bottom: 8px"></div>
-
-      <div class="log-action-bar">
-        <button class="fab" onclick="openModal()" title="Add Exercise">
-          +
-        </button>
-        <button class="save-workout-btn" onclick="saveWorkout()">
-          SAVE WORKOUT
-        </button>
-      </div>
-    </div>
-
-    <!-- ══════════════ HISTORY ══════════════ -->
-    <div class="screen" id="screen-history">
-      <div class="screen-header">
-        <div class="label">// HISTORY</div>
-        <h1>LOG BOOK</h1>
-      </div>
-      <div id="historyList"></div>
-    </div>
-
-    <!-- ══════════════ STATS ══════════════ -->
-    <div class="screen" id="screen-stats">
-      <div class="screen-header">
-        <div class="label">// STATS</div>
-        <h1>PROGRESS</h1>
-      </div>
-
-      <div class="chart-container">
-        <div class="chart-title">
-          <span>Strength Progress</span>
-          <select
-            class="chart-select"
-            id="chartExerciseSelect"
-            onchange="renderChart()"
-          ></select>
-        </div>
-        <canvas id="progressChart" height="160"></canvas>
-      </div>
-
-      <div class="section-title">PERSONAL RECORDS</div>
-      <div id="prList"></div>
-
-      <div class="section-title">INSIGHTS</div>
-      <div id="insightsList"></div>
-    </div>
-
-    <!-- ══════════════ SETTINGS ══════════════ -->
-    <div class="screen" id="screen-settings">
-      <div class="screen-header">
-        <div class="label">// CONFIG</div>
-        <h1>SETTINGS</h1>
-      </div>
-
-      <div class="card">
-        <div
-          style="
-            font-size: 13px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-family: &quot;JetBrains Mono&quot;, monospace;
-            margin-bottom: 14px;
-          "
-        >
-          Weight Unit
-        </div>
-        <div class="units-toggle">
-          <button class="unit-btn active" id="unitKg" onclick="setUnit('kg')">
-            KG
-          </button>
-          <button class="unit-btn" id="unitLb" onclick="setUnit('lb')">
-            LB
-          </button>
-        </div>
-      </div>
-
-      <div class="card">
-        <div
-          style="
-            font-size: 13px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-family: &quot;JetBrains Mono&quot;, monospace;
-            margin-bottom: 4px;
-          "
-        >
-          Goals
-        </div>
-        <div class="goal-input-row">
-          <div>
-            <div class="goal-label">Workouts / Week</div>
-            <div class="goal-sub">Target frequency</div>
+      <!-- EXERCISE PICKER MODAL -->
+      <div class="modal-overlay" id="exerciseModal">
+        <div class="modal">
+          <div class="modal-header">
+            <span class="modal-title">Add Exercise</span>
+            <button class="modal-close" onclick="closeModal()">✕</button>
           </div>
-          <input
-            type="number"
-            class="goal-input"
-            id="goalWorkouts"
-            value="4"
-            min="1"
-            max="7"
-            onchange="saveSettings()"
-          />
-        </div>
-        <div class="goal-input-row">
-          <div>
-            <div class="goal-label">Rest Timer (sec)</div>
-            <div class="goal-sub">Between sets</div>
+          <div class="search-box">
+            <input
+              type="text"
+              class="search-input"
+              id="exerciseSearch"
+              placeholder="Search exercises..."
+              oninput="filterExercises()"
+            />
           </div>
-          <input
-            type="number"
-            class="goal-input"
-            id="goalRestTimer"
-            value="90"
-            min="15"
-            max="300"
-            step="15"
-            onchange="saveSettings()"
-          />
+          <div class="exercise-list" id="exerciseList"></div>
+          <div class="add-custom-input">
+            <input
+              type="text"
+              id="customExerciseName"
+              placeholder="Add custom exercise..."
+            />
+            <button class="btn-add-custom" onclick="addCustomExercise()">
+              + Add
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <!-- ══════════════ HOME ══════════════ -->
+      <div class="screen active" id="screen-home">
+        <div class="screen-header">
+          <div class="label">// FORGE</div>
+          <h1>TODAY</h1>
+        </div>
+
+        <div class="hero-card card">
+          <div class="hero-date" id="heroDate"></div>
+          <div class="streak-badge" id="streakBadge">🔥 0 day streak</div>
+          <button class="btn-start" onclick="goToLog()">
+            ⚡ START WORKOUT
+          </button>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-mini">
+            <div class="num" id="statWeekWorkouts">0</div>
+            <div class="lbl">This Week</div>
+          </div>
+          <div class="stat-mini">
+            <div class="num" id="statTotal">0</div>
+            <div class="lbl">Total</div>
+          </div>
+          <div class="stat-mini">
+            <div class="num" id="statPRs">0</div>
+            <div class="lbl">PRs Set</div>
+          </div>
+        </div>
+
+        <!-- Week Activity -->
+        <div class="card" style="margin: 0 16px 16px">
+          <div
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 11px;
+              color: var(--muted);
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              margin-bottom: 12px;
+            "
+          >
+            Weekly Activity
+          </div>
+          <div class="week-bar" id="weekBar"></div>
+        </div>
+
+        <div class="section-title">RECENT WORKOUTS</div>
+        <div id="recentWorkouts"></div>
+      </div>
+
+      <!-- ══════════════ LOG ══════════════ -->
+      <div class="screen" id="screen-log">
+        <div class="screen-header">
+          <div class="label">// LOG</div>
+          <h1>WORKOUT</h1>
+        </div>
+
+        <div class="workout-note-area">
+          <span style="font-size: 18px; margin-top: 2px">📝</span>
+          <textarea
+            id="workoutNote"
+            placeholder="How are you feeling today?"
+            rows="2"
+          ></textarea>
+        </div>
+
+        <div id="exerciseCards"></div>
+
+        <div id="suggestionArea" style="margin-bottom: 8px"></div>
+
+        <div class="log-action-bar">
+          <button class="fab" onclick="openModal()" title="Add Exercise">
+            +
+          </button>
+          <button class="save-workout-btn" onclick="saveWorkout()">
+            SAVE WORKOUT
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════════ HISTORY ══════════════ -->
+      <div class="screen" id="screen-history">
+        <div class="screen-header">
+          <div class="label">// HISTORY</div>
+          <h1>LOG BOOK</h1>
+        </div>
+        <div id="historyList"></div>
+      </div>
+
+      <!-- ══════════════ STATS ══════════════ -->
+      <div class="screen" id="screen-stats">
+        <div class="screen-header">
+          <div class="label">// STATS</div>
+          <h1>PROGRESS</h1>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-title">
+            <span>Strength Progress</span>
+            <select
+              class="chart-select"
+              id="chartExerciseSelect"
+              onchange="renderChart()"
+            ></select>
+          </div>
+          <canvas id="progressChart" height="160"></canvas>
+        </div>
+
+        <div class="section-title">PERSONAL RECORDS</div>
+        <div id="prList"></div>
+
+        <div class="section-title">INSIGHTS</div>
+        <div id="insightsList"></div>
+      </div>
+
+      <!-- ══════════════ SETTINGS ══════════════ -->
+      <div class="screen" id="screen-settings">
+        <div class="screen-header">
+          <div class="label">// CONFIG</div>
+          <h1>SETTINGS</h1>
+        </div>
+
+        <div class="card">
+          <div
+            style="
+              font-size: 13px;
+              color: var(--muted);
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              margin-bottom: 14px;
+            "
+          >
+            Weight Unit
+          </div>
+          <div class="units-toggle">
+            <button class="unit-btn active" id="unitKg" onclick="setUnit('kg')">
+              KG
+            </button>
+            <button class="unit-btn" id="unitLb" onclick="setUnit('lb')">
+              LB
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div
+            style="
+              font-size: 13px;
+              color: var(--muted);
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              margin-bottom: 4px;
+            "
+          >
+            Goals
+          </div>
+          <div class="goal-input-row">
+            <div>
+              <div class="goal-label">Workouts / Week</div>
+              <div class="goal-sub">Target frequency</div>
+            </div>
+            <input
+              type="number"
+              class="goal-input"
+              id="goalWorkouts"
+              value="4"
+              min="1"
+              max="7"
+              onchange="saveSettings()"
+            />
+          </div>
+          <div class="goal-input-row">
+            <div>
+              <div class="goal-label">Rest Timer (sec)</div>
+              <div class="goal-sub">Between sets</div>
+            </div>
+            <input
+              type="number"
+              class="goal-input"
+              id="goalRestTimer"
+              value="90"
+              min="15"
+              max="300"
+              step="15"
+              onchange="saveSettings()"
+            />
+          </div>
+        </div>
+
+        <div class="card">
+          <div
+            style="
+              font-size: 13px;
+              color: var(--muted);
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              margin-bottom: 14px;
+            "
+          >
+            Data
+          </div>
+          <button
+            onclick="clearAllData()"
+            style="
+              background: rgba(255, 107, 107, 0.1);
+              border: 1px solid rgba(255, 107, 107, 0.3);
+              color: var(--accent3);
+              border-radius: 10px;
+              padding: 12px 20px;
+              cursor: pointer;
+              font-weight: 600;
+              font-size: 14px;
+              width: 100%;
+              transition: background 0.2s;
+            "
+            onmouseover="this.style.background = 'rgba(255,107,107,0.2)'"
+            onmouseout="this.style.background = 'rgba(255,107,107,0.1)'"
+          >
+            Clear All Data
+          </button>
+        </div>
+
         <div
           style="
-            font-size: 13px;
+            text-align: center;
+            padding: 24px;
+            font-size: 12px;
             color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
             font-family: &quot;JetBrains Mono&quot;, monospace;
-            margin-bottom: 14px;
           "
         >
-          Data
+          FORGE v1.0 — Built with ⚡
         </div>
+      </div>
+
+      <!-- ══════════════ NAV ══════════════ -->
+      <nav>
+        <button class="nav-btn active" id="nav-home" onclick="navigate('home')">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+            <polyline points="9,22 9,12 15,12 15,22" />
+          </svg>
+          Home
+        </button>
+        <button class="nav-btn" id="nav-log" onclick="navigate('log')">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          Log
+        </button>
+        <button class="nav-btn" id="nav-history" onclick="navigate('history')">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
+          </svg>
+          History
+        </button>
+        <button class="nav-btn" id="nav-stats" onclick="navigate('stats')">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
+          Stats
+        </button>
         <button
-          onclick="clearAllData()"
-          style="
-            background: rgba(255, 107, 107, 0.1);
-            border: 1px solid rgba(255, 107, 107, 0.3);
-            color: var(--accent3);
-            border-radius: 10px;
-            padding: 12px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            width: 100%;
-            transition: background 0.2s;
-          "
-          onmouseover="this.style.background = 'rgba(255,107,107,0.2)'"
-          onmouseout="this.style.background = 'rgba(255,107,107,0.1)'"
+          class="nav-btn"
+          id="nav-settings"
+          onclick="navigate('settings')"
         >
-          Clear All Data
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"
+            />
+          </svg>
+          Settings
         </button>
-      </div>
-
-      <div
-        style="
-          text-align: center;
-          padding: 24px;
-          font-size: 12px;
-          color: var(--muted);
-          font-family: &quot;JetBrains Mono&quot;, monospace;
-        "
-      >
-        FORGE v1.0 — Built with ⚡
-      </div>
+      </nav>
     </div>
-
-    <!-- ══════════════ NAV ══════════════ -->
-    <nav>
-      <button class="nav-btn active" id="nav-home" onclick="navigate('home')">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-          <polyline points="9,22 9,12 15,12 15,22" />
-        </svg>
-        Home
-      </button>
-      <button class="nav-btn" id="nav-log" onclick="navigate('log')">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="16" />
-          <line x1="8" y1="12" x2="16" y2="12" />
-        </svg>
-        Log
-      </button>
-      <button class="nav-btn" id="nav-history" onclick="navigate('history')">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
-        </svg>
-        History
-      </button>
-      <button class="nav-btn" id="nav-stats" onclick="navigate('stats')">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="20" x2="18" y2="10" />
-          <line x1="12" y1="20" x2="12" y2="4" />
-          <line x1="6" y1="20" x2="6" y2="14" />
-        </svg>
-        Stats
-      </button>
-      <button class="nav-btn" id="nav-settings" onclick="navigate('settings')">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="3" />
-          <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" />
-        </svg>
-        Settings
-      </button>
-    </nav>
-
     <script src="app.js"></script>
   </body>
 </html>
