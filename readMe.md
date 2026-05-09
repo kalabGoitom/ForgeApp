@@ -186,7 +186,7 @@ dismissTimer()                          // Close timer overlay
 
 ## Performance
 
-- **Single HTML file** — No build process or dependencies
+- **HTML file** — No build process or dependencies
 - **Vanilla JavaScript** — No frameworks or libraries
 - **CSS-only animations** — GPU-accelerated smoothness
 - **Canvas rendering** — Efficient chart drawing with requestAnimationFrame
@@ -194,7 +194,7 @@ dismissTimer()                          // Close timer overlay
 ## Customization
 
 ### Change Color Scheme
-Edit the CSS variables at the top of the `<style>` block:
+Edit the CSS variables at the top of the 'style.css` file:
 ```css
 :root {
   --accent: #00f5a0;      /* Primary green */
@@ -205,7 +205,7 @@ Edit the CSS variables at the top of the `<style>` block:
 ```
 
 ### Add Exercises
-Modify the `EXERCISE_DB` object in the script section:
+Modify the `EXERCISE_DB` object in the script file:
 ```javascript
 const EXERCISE_DB = {
   "Chest": ["Bench Press", "Push-Up", "Custom Exercise"],
